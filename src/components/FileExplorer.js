@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Folder from "./Folder";
 
-// Initial folder structure 
 const initialData = {
   Desktop: ["Screenshot1.jpg", "videopal.mp4"],
   Documents: ["Document1.jpg", "Document2.pdf"],
@@ -14,127 +13,118 @@ const initialData = {
 
 const FileExplorer = () => {
   const [data, setData] = useState(initialData);
-  
-  // Track which folder is currently expanded
-  const [expandedFolder, setExpandedFolder] = useState("");
-  
-  // Track the current folder path for file/folder creation
-  const [currentPath, setCurrentPath] = useState("");
+  const [expandedFolder, setExpandedFolder] = useState(""); // Tracks last expanded folder
+  const [currentPath, setCurrentPath] = useState(""); // Tracks current path for file/folder creation
 
-  // Close the folder when clicked outside
+  // Handle outside clicks to collapse folder
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (!e.target.closest(".folder")) {
-        setExpandedFolder(""); // Close the folder if clicked outside
+        setExpandedFolder(""); // Collapse if clicked outside
       }
     };
-
-    document.addEventListener("click", handleClickOutside); // Add event listener for outside clicks
-    return () => document.removeEventListener("click", handleClickOutside); // Clean up the event listener
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
-  // Helper function to check if a folder or file already exists in the directory
   const checkIfExists = (path, name) => {
-    const keys = path.split("/"); // Split path to traverse directories
+    const keys = path.split("/");
     let pointer = data;
 
-    // Traverse path to reach the target folder or file
+    // Traverse the path to get the target directory (folder)
     keys.forEach((key) => {
       pointer = pointer[key] || pointer;
     });
 
-    // Check if the name exists in the current folder or file
+    // Check if file/folder already exists in this directory
     if (Array.isArray(pointer)) {
-      return pointer.includes(name); // Check if file exists in the array
+      return pointer.includes(name);
     } else {
-      return pointer.hasOwnProperty(name); // Check if folder exists in the object
+      return pointer.hasOwnProperty(name);
     }
   };
 
-  // Function to add a new file
   const handleAddFile = () => {
     const name = prompt("Enter new file name:");
-    if (!name) return; // Exit if no name is provided
+    if (!name) return;
 
-    // Check if file with the same name already exists
+    // Check if file with the same name exists in the current folder
     if (checkIfExists(currentPath, name)) {
-      alert("A file or folder with this name already exists.");
+      alert("A file or folder with this name already exists in this folder.");
       return;
     }
 
-    const updatedData = { ...data }; // Copy data to avoid mutating it
+    // Update the data structure by adding the new file
+    const updatedData = { ...data };
     const target = currentPath ? getPathObject(updatedData, currentPath) : updatedData;
 
     if (Array.isArray(target)) {
-      target.push(name); // Add the new file
+      target.push(name); // Add file to the array of files
     } else {
-      target[name] = []; // Treat file as an empty array
+      target[name] = []; // Treat file as a key with an empty array (to signify it's a file)
     }
 
-    setData(updatedData); // Update the state with new data
+    setData(updatedData);
   };
 
-  // Function to add a new folder
   const handleAddFolder = () => {
     const name = prompt("Enter new folder name:");
-    if (!name) return; // Exit if no name is provided
+    if (!name) return;
 
-    // Check if folder with the same name already exists
+    // Check if folder with the same name exists in the current folder
     if (checkIfExists(currentPath, name)) {
-      alert("A file or folder with this name already exists.");
+      alert("A file or folder with this name already exists in this folder.");
       return;
     }
 
+    // Update the data structure by adding the new folder
     const updatedData = { ...data };
     const target = currentPath ? getPathObject(updatedData, currentPath) : updatedData;
 
     if (Array.isArray(target)) {
       target.push(name); // Add folder to the array
     } else {
-      target[name] = {}; // Add folder as an empty object
+      target[name] = {}; // Add folder as a key with an empty object (to signify it's a folder)
     }
 
-    setData(updatedData); // Update the state with new data
+    setData(updatedData);
   };
 
-  // Function to delete a file or folder
   const handleDelete = (path) => {
-    const keys = path.split("/"); // Split path to access the target folder/file
+    const keys = path.split("/");
     const updatedData = { ...data };
     let pointer = updatedData;
 
-    // Traverse to the parent directory of the target file/folder
+    // Traverse the path to get to the parent directory
     keys.slice(0, -1).forEach((key) => {
       pointer = pointer[key] || pointer;
     });
 
-    const name = keys[keys.length - 1]; // Get the name of the folder/file to delete
+    const name = keys[keys.length - 1];
     if (Array.isArray(pointer)) {
-      pointer.splice(pointer.indexOf(name), 1); // Remove the item from the array
+      pointer.splice(pointer.indexOf(name), 1);
     } else {
-      delete pointer[name]; // Delete the item from the object
+      delete pointer[name];
     }
 
-    setData(updatedData); // Update the state with new data
+    setData(updatedData);
   };
 
-  // Function to handle folder expansion and set current path
   const handleExpand = (path) => {
-    setExpandedFolder(path); // Expand the folder
-    setCurrentPath(path); // Set the current path for creation
+    setExpandedFolder(path);
+    setCurrentPath(path); // Update the current path when a folder is expanded
   };
 
-  // Helper function to get an object at a specific path
   const getPathObject = (updatedData, path) => {
-    const keys = path.split("/"); // Split the path to navigate through directories
+    const keys = path.split("/");
     let pointer = updatedData;
 
-    // Traverse through the path to get the target object
+    // Traverse the path to get the target directory (folder or file)
     keys.forEach((key) => {
       pointer = pointer[key] || pointer;
     });
 
-    return pointer; // Return the object at the target path
+    return pointer;
   };
 
   return (
@@ -143,13 +133,13 @@ const FileExplorer = () => {
         <span className="evaluation">EVALUATION</span>
         <div className="buttons">
           <button
-            onClick={handleAddFolder} // Create folder
+            onClick={handleAddFolder} // Create folder at the root or inside the expanded folder
             className="add-btn"
           >
             Create Folder
           </button>
           <button
-            onClick={handleAddFile} // Create file
+            onClick={handleAddFile} // Create file at the root or inside the expanded folder
             className="add-btn"
           >
             Create File

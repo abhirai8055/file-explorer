@@ -33,8 +33,6 @@ const Folder = ({
     return faFile;
   };
 
-  const isInsideExpandedFolder = expandedFolder === path;
-
   return (
     <div className="folder">
       <div className="folder-header">
@@ -46,7 +44,7 @@ const Folder = ({
         </span>
         <span className="folder-name">{name}</span>
 
-        {isInsideExpandedFolder && (
+        {isExpanded && (
           <>
             <button onClick={() => onAddFolder(path)} className="add-btn">
               <FontAwesomeIcon icon={faPlus} /> Folder
