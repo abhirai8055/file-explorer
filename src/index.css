@@ -1,0 +1,110 @@
+body {
+  font-family: "Arial", sans-serif;
+  background-color: #1e1e2f;
+  color: #e0e0e0;
+  margin: 0;
+  padding: 20px;
+}
+
+.file-explorer {
+  display: flex;
+  flex-direction: column;
+  background-color: #2e2e3e;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #1e1e2f;
+  border-radius: 8px 8px 0 0;
+}
+
+.evaluation {
+  font-size: 24px;
+  font-weight: bold;
+  color: #e0e0e0;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.add-btn {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 5px;
+}
+
+.add-btn:hover {
+  background-color: #45a049;
+}
+
+.explorer {
+  padding: 20px;
+}
+
+.folder {
+  margin-left: 20px;
+}
+
+.folder-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  gap: 10px;
+}
+
+.folder-arrow {
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.folder-icon {
+  font-size: 20px;
+}
+
+.folder-name {
+  font-weight: bold;
+  flex-grow: 1;
+}
+
+.delete-btn {
+  background-color: transparent;
+  color: #e0e0e0;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.folder-content {
+  margin-left: 20px;
+}
+
+.file {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  gap: 10px;
+}
+
+.file-icon {
+  font-size: 18px;
+}
+
+.file-name {
+  flex-grow: 1;
+}
+
+.file .delete-btn {
+  font-size: 14px;
+  color: #ff4d4d;
+}
